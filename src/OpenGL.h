@@ -1,0 +1,7 @@
+#ifndef THOSEMAGNIFICENTMEN_OPENGL_H
+#define THOSEMAGNIFICENTMEN_OPENGL_H
+
+#include <windows.h>
+#include <gl/gl.h>
+
+#endif // THOSEMAGNIFICENTMEN_OPENGL_H
