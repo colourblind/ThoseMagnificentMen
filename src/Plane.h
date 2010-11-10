@@ -28,8 +28,8 @@ namespace ThoseMagnificentMen
         void Kill() { dying_ = true; /* TEMP */ Reset(); }
         void ScoreUp() { score_ ++; }
         void ScoreDown() { score_ --; }
-        void TurnLeft(float msecs) { rotation_ -= (TURN_SPEED * msecs); }
-        void TurnRight(float msecs) { rotation_ += (TURN_SPEED * msecs); }
+        void TurnLeft(float msecs) { rotation_ += (TURN_SPEED * msecs); }
+        void TurnRight(float msecs) { rotation_ -= (TURN_SPEED * msecs); }
 
     private:
         Vector2 position_;
