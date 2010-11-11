@@ -17,14 +17,14 @@ namespace ThoseMagnificentMen
             return ::sqrt(x * x + y * y);
         }
 
-        //inline Vector2 Normalise() const
-        //{
-        //    Vector2 v(*this);
-        //    float scale = v.Length();
-        //    v.x /= scale;
-        //    x.y /= scale;
-        //    return v;
-        //}
+        inline Vector2 Normalise() const
+        {
+            Vector2 v(*this);
+            float scale = v.Length();
+            v.x /= scale;
+            v.y /= scale;
+            return v;
+        }
 
         inline Vector2 operator +(const Vector2 &b) const
         {

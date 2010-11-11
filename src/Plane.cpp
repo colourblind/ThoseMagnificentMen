@@ -18,26 +18,37 @@ void Plane::Update(float msecs)
     if (cooldown_ > 0)
         cooldown_ -= msecs;
 
-    if (speed_ < STALL_SPEED)
-    {
-        speed_ = 0;
-        stalled_ = true;
-    }
-
     if (stalled_)
     {
-        speed_ += GRAVITY;
-        position_.y -= speed_;
+        speed_ += GRAVITY * msecs;
+        position_.y -= speed_ * 5.0f * msecs;
     }
     else
     {
+        if (speed_ < STALL_SPEED)
+        {
+            speed_ = 0;
+            stalled_ = true;
+        }
+
         if (dying_)
         {
             // swan dive
         }
+
+        if (rotation_ > PI)
+            rotation_ -= PI * 2;
+        else if (rotation_ < -PI)
+            rotation_ += PI * 2;
+
+        if (rotation_ > (0.25 * PI) && rotation_ < (0.75 * PI))
+            speed_ -= GRAVITY * msecs;
+        else if (rotation_ < (-0.25 * PI) && rotation_ > (-0.75 * PI))
+            speed_ += GRAVITY * msecs;
         else
         {
-            // collect input, update
+            if (speed_ > MAX_SPEED)
+                speed_ = MAX_SPEED;
         }
 
         position_.x += cos(rotation_) * speed_ * msecs;
@@ -58,6 +69,7 @@ void Plane::Render()
     glColor3f(1, 0, 1);
     glPushMatrix();
     glTranslatef(position_.x, position_.y, 0);
+    glRotatef(180 * rotation_ / 3.142, 0, 0, 1);
     glBegin(GL_QUADS);
         glVertex2f(-10, -10);
         glVertex2f(-10, 10);

@@ -6,6 +6,8 @@
 
 namespace ThoseMagnificentMen
 {
+    const float PI = 3.142;
+
     inline void InitRandom()
     {
         int seed = static_cast<int>(time(NULL));
