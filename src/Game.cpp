@@ -97,22 +97,25 @@ void Game::UpdateAndRender(float msecs)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 
+    float width = static_cast<float>(WIDTH);
+    float height = static_cast<float>(HEIGHT);
+
     // Render sky
     glBegin(GL_QUADS);
         glColor3f(0.75f, 0.75f, 1.0f);
         glVertex2f(0, 0);
-        glVertex2f(WIDTH, 0);
+        glVertex2f(width, 0);
         glColor3f(0, 0, 0.25f);
-        glVertex2f(WIDTH, HEIGHT);
-        glVertex2f(0, HEIGHT);
+        glVertex2f(width, height);
+        glVertex2f(0, height);
     glEnd();
 
     // Render ground
     glColor3f(1, 1, 1);
     glBegin(GL_QUADS);
         glVertex2f(0, 0);
-        glVertex2f(WIDTH, 0);
-        glVertex2f(WIDTH, GROUND_LEVEL);
+        glVertex2f(width, 0);
+        glVertex2f(width, GROUND_LEVEL);
         glVertex2f(0, GROUND_LEVEL);
     glEnd();
 
@@ -158,7 +161,7 @@ void Game::GameLogic()
     for (unsigned int i = 0; i < activePlayers_; i ++)
     {
         // Crashed into the ground
-        if (players_[i].GetPosition().y < GROUND_LEVEL)
+        if (players_[i].GetPosition().y < GROUND_LEVEL + 12)
         {
             if (!players_[i].IsDying()) // No excuse
                 players_[i].ScoreDown();
@@ -189,7 +192,12 @@ void Game::GameLogic()
             if ((players_[i].GetPosition() - bullets_[j]->GetPosition()).Length() < 20)
             {
                 players_[i].Kill();
-                bullets_[j]->GetOwner()->ScoreUp();
+                if (!players_[i].IsDying())
+                    bullets_[j]->GetOwner()->ScoreUp();
+                delete bullets_[j];
+                vector<Bullet *>::iterator iter = bullets_.begin();
+                iter += j;
+                bullets_.erase(iter);
                 break;
             }
         }
