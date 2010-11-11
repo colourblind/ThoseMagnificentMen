@@ -12,7 +12,7 @@ Bullet::Bullet(Plane *owner) : owner_(owner)
     position_.x += cos(owner_->GetRotation()) * 20;
     position_.y += sin(owner_->GetRotation()) * 20;
 
-    velocity_ = owner_->GetVelocity() * BULLET_SPEED;
+    velocity_ = owner_->GetVelocity().Normalise() * BULLET_SPEED;
 }
 
 bool Bullet::Update(float msecs)
