@@ -25,7 +25,7 @@ namespace ThoseMagnificentMen
         void Reset();
         Bullet *Fire();
 
-        void Kill() { dying_ = true; /* TEMP */ Reset(); }
+        void Kill() { dying_ = true; }
         void ScoreUp() { score_ ++; }
         void ScoreDown() { score_ --; }
         void TurnLeft(float msecs) { rotation_ += (TURN_SPEED * msecs); }

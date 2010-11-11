@@ -19,7 +19,7 @@ bool Bullet::Update(float msecs)
 {
     position_ += velocity_ * msecs;
 
-    bool isOffscreen = position_.x < 0 || position_.x > 1024 || position_.y < GROUND_LEVEL || position_.y > 768;
+    bool isOffscreen = position_.x < 0 || position_.x > WIDTH || position_.y < GROUND_LEVEL || position_.y > HEIGHT;
     return isOffscreen;
 }
 

@@ -6,7 +6,7 @@
 
 namespace ThoseMagnificentMen
 {
-    const float PI = 3.142;
+    const float PI = 3.142f;
 
     inline void InitRandom()
     {

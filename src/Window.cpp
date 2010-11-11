@@ -1,7 +1,9 @@
 #include "Window.h"
 
 #include <tchar.h>
-#include <gl/glu.h>
+
+#include "Constants.h"
+#include "OpenGL.h"
 
 using namespace ThoseMagnificentMen;
 
@@ -49,8 +51,8 @@ bool Window::Create(HINSTANCE instance)
 		DEVMODE screenSettings;
 		memset(&screenSettings, 0, sizeof(screenSettings));
 		screenSettings.dmSize = sizeof(screenSettings);
-		screenSettings.dmPelsWidth	= 1024;
-		screenSettings.dmPelsHeight	= 768;
+		screenSettings.dmPelsWidth	= WIDTH;
+		screenSettings.dmPelsHeight	= HEIGHT;
 		screenSettings.dmBitsPerPel	= 32;
 		screenSettings.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
 
@@ -73,8 +75,8 @@ bool Window::Create(HINSTANCE instance)
 				style | WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
 				0,
 				0,
-				1024,
-				768,
+				WIDTH,
+				HEIGHT,
 				NULL,
 				NULL,
 				windowClass.hInstance,

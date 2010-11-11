@@ -29,9 +29,12 @@ int Game::Run()
     for (unsigned int i = 0; i < activePlayers_; i ++)
         players_[i].Reset();
 
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_ONE, GL_SRC_COLOR);
+
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(0, 1024, 0, 768, -1, 1);
+    glOrtho(0, WIDTH, 0, HEIGHT, -1, 1);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
