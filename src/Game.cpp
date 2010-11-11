@@ -61,10 +61,13 @@ int Game::Run()
 
 void Game::HandleControls(float msecs)
 {
-    if (input_.GetKeyDown(KeyZ))
-        players_[0].TurnLeft(msecs);
-    if (input_.GetKeyDown(KeyX))
-        players_[0].TurnRight(msecs);
+    if (!players_[0].IsDying())
+    {
+        if (input_.GetKeyDown(KeyZ))
+            players_[0].TurnLeft(msecs);
+        if (input_.GetKeyDown(KeyX))
+            players_[0].TurnRight(msecs);
+    }
     if (input_.GetKeyDown(KeyC))
     {
         Bullet * bullet = players_[0].Fire();
@@ -72,10 +75,13 @@ void Game::HandleControls(float msecs)
             bullets_.push_back(bullet);
     }
 
-    if (input_.GetKeyDown(KeyI))
-        players_[1].TurnLeft(msecs);
-    if (input_.GetKeyDown(KeyO))
-        players_[1].TurnRight(msecs);
+    if (!players_[1].IsDying())
+    {
+        if (input_.GetKeyDown(KeyI))
+            players_[1].TurnLeft(msecs);
+        if (input_.GetKeyDown(KeyO))
+            players_[1].TurnRight(msecs);
+    }
     if (input_.GetKeyDown(KeyP))
     {
         Bullet * bullet = players_[1].Fire();
