@@ -97,6 +97,25 @@ void Game::UpdateAndRender(float msecs)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 
+    // Render sky
+    glBegin(GL_QUADS);
+        glColor3f(0.75f, 0.75f, 1.0f);
+        glVertex2f(0, 0);
+        glVertex2f(WIDTH, 0);
+        glColor3f(0, 0, 0.25f);
+        glVertex2f(WIDTH, HEIGHT);
+        glVertex2f(0, HEIGHT);
+    glEnd();
+
+    // Render ground
+    glColor3f(1, 1, 1);
+    glBegin(GL_QUADS);
+        glVertex2f(0, 0);
+        glVertex2f(WIDTH, 0);
+        glVertex2f(WIDTH, GROUND_LEVEL);
+        glVertex2f(0, GROUND_LEVEL);
+    glEnd();
+
     for (unsigned int i = 0; i < activePlayers_; i ++)
     {
         players_[i].Update(msecs);
