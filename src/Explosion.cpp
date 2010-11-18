@@ -17,16 +17,16 @@ bool Explosion::Update(float msecs)
     
     for (int i = 0; i < NUM_SHRAPNEL; i ++)
     {
-        debris_[i].Velocity *= 0.99;
-        debris_[i].Velocity.y -= GRAVITY * 3 * msecs;
-        debris_[i].Position += debris_[i].Velocity * msecs;
-        debris_[i].Rotation += debris_[i].RotationSpeed * msecs;
-
         if (debris_[i].Position.y < GROUND_LEVEL)
         {
             debris_[i].Velocity *= 0.95;
             debris_[i].Velocity.y *= -1;
         }
+
+        debris_[i].Velocity *= 0.99;
+        debris_[i].Velocity.y -= GRAVITY * 3 * msecs;
+        debris_[i].Position += debris_[i].Velocity * msecs;
+        debris_[i].Rotation += debris_[i].RotationSpeed * msecs;
     }
 
     return lifetime_ < 0;
