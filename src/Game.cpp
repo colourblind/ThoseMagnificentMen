@@ -27,10 +27,10 @@ int Game::Run()
 
     InitRandom();
     for (unsigned int i = 0; i < activePlayers_; i ++)
-        players_[i].Reset();
+        players_[i].Reset(i + 1);
 
     glEnable(GL_BLEND);
-    glBlendFunc(GL_ONE, GL_SRC_COLOR);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -171,10 +171,13 @@ void Game::GameLogic()
             continue;
         }
 
+        if (players_[i].IsInvincible())
+            continue;
+
         // Collisions with other players
         for (unsigned int j = i + 1; j < activePlayers_; j ++)
         {
-            if ((players_[i].GetPosition() - players_[j].GetPosition()).Length() < 20)
+            if ((players_[i].GetPosition() - players_[j].GetPosition()).Length() < 20 && !players_[j].IsInvincible())
             {
                 Explosion *bang1 = new Explosion(&players_[i]);
                 Explosion *bang2 = new Explosion(&players_[j]);

@@ -18,10 +18,11 @@ namespace ThoseMagnificentMen
         Vector2 GetVelocity() const { return Vector2(cos(rotation_) * speed_, sin(rotation_) * speed_); }
         bool IsStalled() const { return stalled_; }
         bool IsDying() const { return dying_; }
-        bool IsInvincible() const { return invincible_ <= 0; }
+        bool IsInvincible() const { return invincible_ > 0; }
 
         void Update(float msecs);
         void Render();
+        void Reset(short playerNumber) { playerNumber_ = playerNumber; Reset(); }
         void Reset();
         Bullet *Fire();
 
@@ -32,6 +33,7 @@ namespace ThoseMagnificentMen
         void TurnRight(float msecs) { rotation_ -= (TURN_SPEED * msecs); }
 
     private:
+        short playerNumber_;
         Vector2 position_;
         float rotation_;
         float speed_;

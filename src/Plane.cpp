@@ -70,7 +70,10 @@ void Plane::Update(float msecs)
 
 void Plane::Render()
 {
-    glColor4f(1, 0, 1, invincible_ <= 0 ? 1.0f : 0.5f);
+    float red = playerNumber_ & 0x1;
+    float green = playerNumber_ & 0x2;
+    float blue = playerNumber_ & 0x4;
+    glColor4f(red, green, blue, invincible_ <= 0 ? 1.0f : 0.5f);
     glPushMatrix();
     glTranslatef(position_.x, position_.y, 0);
     glRotatef(180 * rotation_ / PI, 0, 0, 1);
