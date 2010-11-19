@@ -1,5 +1,5 @@
 *.ncb
 *.suo
 src/*.user
-src/Debug
-src/Release
+bin
+build
