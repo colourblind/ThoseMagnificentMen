@@ -15,9 +15,10 @@ Game::~Game()
 {
     for (unsigned int i = 0; i < bullets_.size(); i ++)
         delete bullets_[i];
-
     for (unsigned int i = 0; i < explosions_.size(); i ++)
         delete explosions_[i];
+    for (unsigned int i = 0; i < smokes_.size(); i ++)
+        delete smokes_[i];
 }
 
 int Game::Run()
@@ -123,6 +124,9 @@ void Game::UpdateAndRender(float msecs)
     {
         players_[i].Update(msecs);
         players_[i].Render();
+
+        if (players_[i].IsDying() && players_[i].ReleaseSmoke())
+            smokes_.push_back(new Smoke(&players_[i]));
     }
 
     vector<Bullet *>::iterator bulletIter = bullets_.begin();
@@ -152,6 +156,21 @@ void Game::UpdateAndRender(float msecs)
         {
             (*exploIter)->Render();
             exploIter ++;
+        }
+    }
+
+    vector<Smoke *>::iterator smokeIter = smokes_.begin();
+    while (smokeIter != smokes_.end())
+    {
+        if ((*smokeIter)->Update(msecs))
+        {
+            delete *smokeIter;
+            smokeIter = smokes_.erase(smokeIter);
+        }
+        else
+        {
+            (*smokeIter)->Render();
+            smokeIter ++;
         }
     }
 }

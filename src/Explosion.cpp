@@ -50,3 +50,34 @@ void Explosion::Render()
         glPopMatrix();
     }
 }
+
+Smoke::Smoke(Plane *victim) :  lifetime_(1500), 
+                               position_(victim->GetPosition() + Vector2(GetRandom(-8.0f, 8.0f), GetRandom(-8.0f, 8.0f))),
+                               rotation_(GetRandom(0.0f, 2.0f * PI)),
+                               size_(GetRandom(4.0f, 10.0f))
+{
+
+}
+
+bool Smoke::Update(float msecs)
+{
+    lifetime_ -= msecs;
+    return lifetime_ < 0;
+}
+
+void Smoke::Render()
+{
+    float halfSize = size_ / 2;
+    glColor4f(0.5f, 0.5f, 0.5f, lifetime_ / 1500);
+    glPushMatrix();
+    glTranslatef(position_.x, position_.y, 0);
+    glRotatef(180 * rotation_ / PI, 0, 0, 1);
+    glBegin(GL_QUADS);
+        glVertex2f(-halfSize, -halfSize);
+        glVertex2f(-halfSize, halfSize);
+        glVertex2f(halfSize, halfSize);
+        glVertex2f(halfSize, -halfSize);
+    glEnd();
+    glPopMatrix();
+}
+

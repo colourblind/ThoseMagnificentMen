@@ -47,6 +47,7 @@ void Plane::Update(float msecs)
                 rotation_ -= TURN_SPEED * msecs;
             else
                 rotation_ += TURN_SPEED * msecs;
+            timeToSmoke_ -= msecs;
         }
 
         // Speed up on dive, slow down on climb
@@ -96,6 +97,7 @@ void Plane::Reset()
     dying_ = false;
     invincible_ = INVINCIBILITY_TIME;
     cooldown_ = 0;
+    timeToSmoke_ = 0;
 }
 
 Bullet *Plane::Fire()
@@ -108,4 +110,15 @@ Bullet *Plane::Fire()
     }
     else
         return NULL;
+}
+
+bool Plane::ReleaseSmoke()
+{
+    if (timeToSmoke_ < 300)
+    {
+        timeToSmoke_ += 300;
+        return true;
+    }
+    else
+        return false;
 }

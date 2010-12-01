@@ -19,6 +19,7 @@ namespace ThoseMagnificentMen
         bool IsStalled() const { return stalled_; }
         bool IsDying() const { return dying_; }
         bool IsInvincible() const { return invincible_ > 0; }
+        
 
         void Update(float msecs);
         void Render();
@@ -31,6 +32,7 @@ namespace ThoseMagnificentMen
         void ScoreDown() { score_ --; }
         void TurnLeft(float msecs) { rotation_ += (TURN_SPEED * msecs); }
         void TurnRight(float msecs) { rotation_ -= (TURN_SPEED * msecs); }
+        bool ReleaseSmoke();
 
     private:
         short playerNumber_;
@@ -39,6 +41,7 @@ namespace ThoseMagnificentMen
         float speed_;
         bool stalled_;
         bool dying_;
+        float timeToSmoke_;
         float invincible_;
         int score_;
         float cooldown_;

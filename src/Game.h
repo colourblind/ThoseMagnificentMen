@@ -29,6 +29,7 @@ namespace ThoseMagnificentMen
         Plane players_[4];
         std::vector<Bullet *> bullets_;
         std::vector<Explosion *> explosions_;
+        std::vector<Smoke *> smokes_;
         unsigned int activePlayers_;
     };
 }

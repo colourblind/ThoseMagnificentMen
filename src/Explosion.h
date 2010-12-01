@@ -38,6 +38,21 @@ namespace ThoseMagnificentMen
         Debris debris_[NUM_SHRAPNEL];
         float lifetime_;
     };
+
+    class Smoke
+    {
+    public:
+        Smoke(Plane *victim);
+
+        bool Update(float msecs);
+        void Render();
+
+    private:
+        Vector2 position_;
+        float rotation_;
+        float size_;
+        float lifetime_;
+    };
 }
 
 #endif // THOSEMAGNIFICENTMEN_EXPLOSION_H
