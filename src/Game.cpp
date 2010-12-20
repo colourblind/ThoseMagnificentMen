@@ -2,6 +2,8 @@
 
 #include "Maths.h"
 #include "Constants.h"
+#include "Loaders.h"
+#include "Resource.h"
 
 using namespace std;
 using namespace ThoseMagnificentMen;
@@ -25,6 +27,8 @@ int Game::Run()
 {
     if (!window_.Init(&input_))
         return 1;
+
+    texture_ = Loaders::LoadTexture(IDB_SPRITES);
 
     InitRandom();
     for (unsigned int i = 0; i < activePlayers_; i ++)
@@ -112,13 +116,17 @@ void Game::UpdateAndRender(float msecs)
     glEnd();
 
     // Render ground
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, texture_);
     glColor3f(1, 1, 1);
     glBegin(GL_QUADS);
-        glVertex2f(0, 0);
-        glVertex2f(width, 0);
-        glVertex2f(width, GROUND_LEVEL);
-        glVertex2f(0, GROUND_LEVEL);
+        glTexCoord2f(0, 0);        glVertex2f(0, 0);
+        glTexCoord2f(1, 0);         glVertex2f(width, 0);
+        glTexCoord2f(1, 1);         glVertex2f(width, GROUND_LEVEL);
+        glTexCoord2f(0, 1);         glVertex2f(0, GROUND_LEVEL);
     glEnd();
+    glDisable(GL_TEXTURE_2D);
+
 
     for (unsigned int i = 0; i < activePlayers_; i ++)
     {

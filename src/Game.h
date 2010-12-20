@@ -31,6 +31,7 @@ namespace ThoseMagnificentMen
         std::vector<Explosion *> explosions_;
         std::vector<Smoke *> smokes_;
         unsigned int activePlayers_;
+        GLuint texture_;
     };
 }
 
