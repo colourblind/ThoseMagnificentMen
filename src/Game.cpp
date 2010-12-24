@@ -116,20 +116,27 @@ void Game::UpdateAndRender(float msecs)
     glEnd();
 
     // Render ground
+    // This is hacky as hell because I can't think of a decent way of tiling a subtexture.
     SpriteBlock sprite = SPRITES[SPRITE_GROUND];
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, texture_);
     glColor3f(1, 1, 1);
-    glBegin(GL_QUADS);
-        glTexCoord2f(sprite.x / 128, (sprite.y + sprite.height) / 128);
-        glVertex2f(0, 0);
-        glTexCoord2f((sprite.x + sprite.height) / 128, (sprite.y + sprite.height) / 128);
-        glVertex2f(width, 0);
-        glTexCoord2f((sprite.x + sprite.width) / 128, sprite.y / 128);
-        glVertex2f(width, GROUND_LEVEL);
-        glTexCoord2f(sprite.x / 128, sprite.y / 128);
-        glVertex2f(0, GROUND_LEVEL);
-    glEnd();
+    for (int i = 0; i < width; i += sprite.width)
+    {
+        for (int j = GROUND_LEVEL; j > 0 - sprite.height; j -= sprite.height)
+        {
+            glBegin(GL_QUADS);
+                glTexCoord2f(sprite.x / 128, (sprite.y + sprite.height) / 128);
+                glVertex2f(i, j);
+                glTexCoord2f((sprite.x + sprite.height) / 128, (sprite.y + sprite.height) / 128);
+                glVertex2f(i + sprite.width, j);
+                glTexCoord2f((sprite.x + sprite.width) / 128, sprite.y / 128);
+                glVertex2f(i + sprite.width, j - sprite.height);
+                glTexCoord2f(sprite.x / 128, sprite.y / 128);
+                glVertex2f(i, j - sprite.height);
+            glEnd();
+        }
+    }
 
     for (unsigned int i = 0; i < activePlayers_; i ++)
     {
