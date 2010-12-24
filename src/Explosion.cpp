@@ -21,6 +21,7 @@ bool Explosion::Update(float msecs)
         {
             debris_[i].Velocity *= 0.95f;
             debris_[i].Velocity.y *= -1;
+            debris_[i].Position.y += GROUND_LEVEL - debris_[i].Position.y;
         }
 
         debris_[i].Velocity *= 0.99f;
