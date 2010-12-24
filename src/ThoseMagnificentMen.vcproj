@@ -40,6 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="..\lib"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -57,8 +58,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="opengl32.lib"
+				AdditionalDependencies="opengl32.lib libpng.lib zlib.lib"
 				OutputFile="$(OutDir)\$(ProjectName)_d.exe"
+				AdditionalLibraryDirectories="..\lib\win32"
 				GenerateDebugInformation="true"
 				TargetMachine="1"
 			/>
@@ -111,6 +113,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
+				AdditionalIncludeDirectories="..\lib"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				WarningLevel="3"
@@ -127,7 +130,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="opengl32.lib"
+				AdditionalDependencies="opengl32.lib libpng.lib zlib.lib"
+				AdditionalLibraryDirectories="..\lib\win32"
 				GenerateDebugInformation="true"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -181,6 +185,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Loaders.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Main.cpp"
 				>
 			</File>
@@ -219,6 +227,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Loaders.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Maths.h"
 				>
 			</File>
@@ -228,6 +240,10 @@
 			</File>
 			<File
 				RelativePath=".\Plane.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Resource.h"
 				>
 			</File>
 			<File
@@ -244,6 +260,10 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
+			<File
+				RelativePath=".\Resources.rc"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>
