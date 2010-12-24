@@ -110,23 +110,26 @@ void Game::UpdateAndRender(float msecs)
         glColor3f(0.75f, 0.75f, 1.0f);
         glVertex2f(0, 0);
         glVertex2f(width, 0);
-        glColor3f(0, 0, 0.25f);
+        glColor3f(0, 0, 0.5f);
         glVertex2f(width, height);
         glVertex2f(0, height);
     glEnd();
 
     // Render ground
+    SpriteBlock sprite = SPRITES[SPRITE_GROUND];
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, texture_);
     glColor3f(1, 1, 1);
     glBegin(GL_QUADS);
-        glTexCoord2f(0, 0);        glVertex2f(0, 0);
-        glTexCoord2f(1, 0);         glVertex2f(width, 0);
-        glTexCoord2f(1, 1);         glVertex2f(width, GROUND_LEVEL);
-        glTexCoord2f(0, 1);         glVertex2f(0, GROUND_LEVEL);
+        glTexCoord2f(sprite.x / 128, (sprite.y + sprite.height) / 128);
+        glVertex2f(0, 0);
+        glTexCoord2f((sprite.x + sprite.height) / 128, (sprite.y + sprite.height) / 128);
+        glVertex2f(width, 0);
+        glTexCoord2f((sprite.x + sprite.width) / 128, sprite.y / 128);
+        glVertex2f(width, GROUND_LEVEL);
+        glTexCoord2f(sprite.x / 128, sprite.y / 128);
+        glVertex2f(0, GROUND_LEVEL);
     glEnd();
-    glDisable(GL_TEXTURE_2D);
-
 
     for (unsigned int i = 0; i < activePlayers_; i ++)
     {
@@ -135,21 +138,6 @@ void Game::UpdateAndRender(float msecs)
 
         if (players_[i].IsDying() && players_[i].ReleaseSmoke())
             smokes_.push_back(new Smoke(&players_[i]));
-    }
-
-    vector<Bullet *>::iterator bulletIter = bullets_.begin();
-    while (bulletIter != bullets_.end())
-    {
-        if ((*bulletIter)->Update(msecs))
-        {
-            delete *bulletIter;
-            bulletIter = bullets_.erase(bulletIter);
-        }
-        else
-        {
-            (*bulletIter)->Render();
-            bulletIter ++;
-        }
     }
 
     vector<Explosion *>::iterator exploIter = explosions_.begin();
@@ -179,6 +167,22 @@ void Game::UpdateAndRender(float msecs)
         {
             (*smokeIter)->Render();
             smokeIter ++;
+        }
+    }
+    glDisable(GL_TEXTURE_2D);
+
+    vector<Bullet *>::iterator bulletIter = bullets_.begin();
+    while (bulletIter != bullets_.end())
+    {
+        if ((*bulletIter)->Update(msecs))
+        {
+            delete *bulletIter;
+            bulletIter = bullets_.erase(bulletIter);
+        }
+        else
+        {
+            (*bulletIter)->Render();
+            bulletIter ++;
         }
     }
 }

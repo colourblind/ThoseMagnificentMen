@@ -3,6 +3,7 @@
 #include "Maths.h"
 #include "OpenGL.h"
 #include "Bullet.h"
+#include "Loaders.h"
 
 using namespace ThoseMagnificentMen;
 
@@ -71,17 +72,19 @@ void Plane::Update(float msecs)
 
 void Plane::Render()
 {
-    float red = playerNumber_ & 0x1;
-    float green = playerNumber_ & 0x2;
-    float blue = playerNumber_ & 0x4;
-    glColor4f(red, green, blue, invincible_ <= 0 ? 1.0f : 0.5f);
+    SpriteBlock sprite = SPRITES[playerNumber_ - 1];
+    glColor4f(1, 1, 1, invincible_ <= 0 ? 1.0f : 0.5f);
     glPushMatrix();
     glTranslatef(position_.x, position_.y, 0);
     glRotatef(180 * rotation_ / PI, 0, 0, 1);
     glBegin(GL_QUADS);
+        glTexCoord2f(sprite.x / 128, (sprite.y + sprite.height) / 128);
         glVertex2f(-10, -10);
+        glTexCoord2f(sprite.x / 128, sprite.y / 128);
         glVertex2f(-10, 10);
+        glTexCoord2f((sprite.x + sprite.width) / 128, sprite.y / 128);
         glVertex2f(10, 10);
+        glTexCoord2f((sprite.x + sprite.height) / 128, (sprite.y + sprite.height) / 128);
         glVertex2f(10, -10);
     glEnd();
     glPopMatrix();
@@ -114,9 +117,9 @@ Bullet *Plane::Fire()
 
 bool Plane::ReleaseSmoke()
 {
-    if (timeToSmoke_ < 300)
+    if (timeToSmoke_ < 100)
     {
-        timeToSmoke_ += 300;
+        timeToSmoke_ += 100;
         return true;
     }
     else
