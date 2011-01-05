@@ -15,8 +15,8 @@ namespace ThoseMagnificentMen
             Position(victim->GetPosition()), 
             Velocity(victim->GetVelocity() + Vector2(GetRandom(-MAX_EXPLOSION_SPEED, MAX_EXPLOSION_SPEED), GetRandom(-MAX_EXPLOSION_SPEED, MAX_EXPLOSION_SPEED)) + victim->GetVelocity()), 
             Rotation(GetRandom(-1.0f, 1.0f)),
-            RotationSpeed(GetRandom(-MAX_EXPLOSION_SPEED, MAX_EXPLOSION_SPEED)),
-            Size(GetRandom(2.0f, 8.0f))
+            RotationSpeed(GetRandom(-MAX_EXPLOSION_SPEED * 0.25f, MAX_EXPLOSION_SPEED * 0.25f)),
+            Size(GetRandom(4.0f, 14.0f))
         { }
 
         Vector2 Position;

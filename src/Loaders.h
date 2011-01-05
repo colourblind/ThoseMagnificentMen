@@ -9,7 +9,6 @@ namespace ThoseMagnificentMen
     {
     public:
         static GLuint LoadTexture(int resourceId);
-
     };
 }
 

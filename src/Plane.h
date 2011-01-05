@@ -20,7 +20,6 @@ namespace ThoseMagnificentMen
         bool IsDying() const { return dying_; }
         bool IsInvincible() const { return invincible_ > 0; }
         
-
         void Update(float msecs);
         void Render();
         void Reset(short playerNumber) { playerNumber_ = playerNumber; Reset(); }
