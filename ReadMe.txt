@@ -15,3 +15,10 @@ Player 2 (green)
 Turn anti-clockwise:    I
 Turn clockwise:         O
 Fire:                   P
+
+TODO
+
+- Font rendering
+- Customisable controls
+- Sound
+- Music
