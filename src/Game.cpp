@@ -8,7 +8,7 @@
 using namespace std;
 using namespace ThoseMagnificentMen;
 
-Game::Game(HINSTANCE hInstance) : activePlayers_(2)
+Game::Game(HINSTANCE hInstance) : activePlayers_(2), texture_(0)
 {
     window_.Create(hInstance);
 }
@@ -21,6 +21,9 @@ Game::~Game()
         delete explosions_[i];
     for (unsigned int i = 0; i < smokes_.size(); i ++)
         delete smokes_[i];
+
+    if (texture_)
+        glDeleteTextures(1, &texture_);
 }
 
 int Game::Run()
@@ -43,15 +46,17 @@ int Game::Run()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
+    LARGE_INTEGER perfFreq;
+    ::QueryPerformanceFrequency(&perfFreq);
+    float convertToMillis = 1000.0f / static_cast<float>(perfFreq.QuadPart);
+
+    LARGE_INTEGER current;
+    LARGE_INTEGER lastFrame;
+    ::QueryPerformanceCounter(&lastFrame);
+
     MSG msg;
     while(true)
     {
-        float msecs = 10;
-
-        HandleControls(msecs);
-        UpdateAndRender(msecs);
-        GameLogic();
-
     	if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
 			if (msg.message == WM_QUIT)
@@ -60,8 +65,18 @@ int Game::Run()
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
+        else
+        {
+            ::QueryPerformanceCounter(&current);
+            float msecs = static_cast<float>(current.QuadPart - lastFrame.QuadPart) * convertToMillis;
+            lastFrame = current;
 
-        window_.SwapBuffers();
+            HandleControls(msecs);
+            UpdateAndRender(msecs);
+            GameLogic();
+
+            window_.SwapBuffers();
+        }
     }
 
     return 0;
