@@ -30,6 +30,7 @@ namespace ThoseMagnificentMen
         void HandleControls(float msecs);
         void UpdateAndRender(float msecs);
         void GameLogic();
+        int TotalPlayers() { return activePlayers_ + botPlayers_; }
 
         Window window_;
         Input input_;
@@ -39,6 +40,7 @@ namespace ThoseMagnificentMen
         std::vector<Explosion *> explosions_;
         std::vector<Smoke *> smokes_;
         unsigned int activePlayers_;
+        unsigned int botPlayers_;
         GLuint texture_;
     };
 }

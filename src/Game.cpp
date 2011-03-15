@@ -8,7 +8,7 @@
 using namespace std;
 using namespace ThoseMagnificentMen;
 
-Game::Game(HINSTANCE hInstance) : activePlayers_(2), texture_(0)
+Game::Game(HINSTANCE hInstance) : activePlayers_(2), botPlayers_(2), texture_(0)
 {
     window_.Create(hInstance);
 
@@ -50,7 +50,7 @@ int Game::Run()
     texture_ = Loaders::LoadTexture(IDB_SPRITES);
 
     InitRandom();
-    for (unsigned int i = 0; i < activePlayers_; i ++)
+    for (unsigned int i = 0; i < TotalPlayers(); i ++)
         players_[i].Reset(i + 1);
 
     glEnable(GL_BLEND);
@@ -100,6 +100,7 @@ int Game::Run()
 
 void Game::HandleControls(float msecs)
 {
+    // Get inputs for player controlled planes
     for (int i = 0; i < activePlayers_; i ++)
     {
         if (!players_[i].IsDying())
@@ -115,6 +116,12 @@ void Game::HandleControls(float msecs)
             if (bullet != NULL)
                 bullets_.push_back(bullet);
         }
+    }
+
+    // Run AI for computer planes
+    for (int i = activePlayers_; i < activePlayers_ + botPlayers_; i ++)
+    {
+
     }
 }
 
@@ -158,7 +165,7 @@ void Game::UpdateAndRender(float msecs)
         }
     }
 
-    for (unsigned int i = 0; i < activePlayers_; i ++)
+    for (unsigned int i = 0; i < TotalPlayers(); i ++)
     {
         players_[i].Update(msecs);
         players_[i].Render();
@@ -216,7 +223,7 @@ void Game::UpdateAndRender(float msecs)
 
 void Game::GameLogic()
 {
-    for (unsigned int i = 0; i < activePlayers_; i ++)
+    for (unsigned int i = 0; i < TotalPlayers(); i ++)
     {
         // Crashed into the ground
         if (players_[i].GetPosition().y < GROUND_LEVEL + 12)
@@ -233,7 +240,7 @@ void Game::GameLogic()
             continue;
 
         // Collisions with other players
-        for (unsigned int j = i + 1; j < activePlayers_; j ++)
+        for (unsigned int j = i + 1; j < TotalPlayers(); j ++)
         {
             if ((players_[i].GetPosition() - players_[j].GetPosition()).Length() < 20 && !players_[j].IsInvincible())
             {
