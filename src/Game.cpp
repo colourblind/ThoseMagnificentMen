@@ -11,6 +11,22 @@ using namespace ThoseMagnificentMen;
 Game::Game(HINSTANCE hInstance) : activePlayers_(2), texture_(0)
 {
     window_.Create(hInstance);
+
+    keyBindings_[0].left = KeyZ;
+    keyBindings_[0].right = KeyX;
+    keyBindings_[0].fire = KeyC;
+
+    keyBindings_[1].left = KeyI;
+    keyBindings_[1].right = KeyO;
+    keyBindings_[1].fire = KeyP;
+
+    keyBindings_[2].left = KeyLeft;
+    keyBindings_[2].right = KeyRight;
+    keyBindings_[2].fire = KeyUp;
+
+    keyBindings_[3].left = KeyNumPad4;
+    keyBindings_[3].right = KeyNumPad5;
+    keyBindings_[3].fire = KeyNumPad6;
 }
 
 Game::~Game()
@@ -84,32 +100,21 @@ int Game::Run()
 
 void Game::HandleControls(float msecs)
 {
-    if (!players_[0].IsDying())
+    for (int i = 0; i < activePlayers_; i ++)
     {
-        if (input_.GetKeyDown(KeyZ))
-            players_[0].TurnLeft(msecs);
-        if (input_.GetKeyDown(KeyX))
-            players_[0].TurnRight(msecs);
-    }
-    if (input_.GetKeyDown(KeyC))
-    {
-        Bullet * bullet = players_[0].Fire();
-        if (bullet != NULL)
-            bullets_.push_back(bullet);
-    }
-
-    if (!players_[1].IsDying())
-    {
-        if (input_.GetKeyDown(KeyI))
-            players_[1].TurnLeft(msecs);
-        if (input_.GetKeyDown(KeyO))
-            players_[1].TurnRight(msecs);
-    }
-    if (input_.GetKeyDown(KeyP))
-    {
-        Bullet * bullet = players_[1].Fire();
-        if (bullet != NULL)
-            bullets_.push_back(bullet);
+        if (!players_[i].IsDying())
+        {
+            if (input_.GetKeyDown(keyBindings_[i].left))
+                players_[i].TurnLeft(msecs);
+            if (input_.GetKeyDown(keyBindings_[i].right))
+                players_[i].TurnRight(msecs);
+        }
+        if (input_.GetKeyDown(keyBindings_[i].fire))
+        {
+            Bullet * bullet = players_[i].Fire();
+            if (bullet != NULL)
+                bullets_.push_back(bullet);
+        }
     }
 }
 

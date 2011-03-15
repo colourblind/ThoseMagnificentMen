@@ -11,6 +11,13 @@
 
 namespace ThoseMagnificentMen
 {
+    struct KeyBindings
+    {
+        Key left;
+        Key right;
+        Key fire;
+    };
+
     class Game
     {
     public:
@@ -27,6 +34,7 @@ namespace ThoseMagnificentMen
         Window window_;
         Input input_;
         Plane players_[4];
+        KeyBindings keyBindings_[4];
         std::vector<Bullet *> bullets_;
         std::vector<Explosion *> explosions_;
         std::vector<Smoke *> smokes_;
