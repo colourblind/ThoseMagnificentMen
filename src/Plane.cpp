@@ -19,10 +19,6 @@ void Plane::Update(float msecs)
     if (cooldown_ > 0)
         cooldown_ -= msecs;
 
-    // Clamp speed
-    if (speed_ > MAX_SPEED)
-        speed_ = MAX_SPEED;
-
     // Normalise rotation
     if (rotation_ > PI)
         rotation_ -= PI * 2;
@@ -31,8 +27,10 @@ void Plane::Update(float msecs)
 
     if (stalled_)
     {
-        speed_ += GRAVITY * msecs;
-        position_.y -= speed_ * 2.0f * msecs;
+        if (speed_ < MAX_SPEED)
+            speed_ += GRAVITY * 2 * msecs;
+
+        position_.y -= speed_ * msecs;
     }
     else
     {
@@ -56,6 +54,10 @@ void Plane::Update(float msecs)
             speed_ -= GRAVITY * msecs * 0.25f; // Diving is easier than climbing
         else if (rotation_ < (-0.25 * PI) && rotation_ > (-0.75 * PI))
             speed_ += GRAVITY * msecs;
+
+        // Clamp speed
+        if (speed_ > MAX_SPEED)
+            speed_ = MAX_SPEED;
 
         position_.x += cos(rotation_) * speed_ * msecs;
         position_.y += sin(rotation_) * speed_ * msecs;
