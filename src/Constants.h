@@ -1,6 +1,8 @@
 #ifndef THOSEMAGNIFICENTMEN_CONSTANTS_H
 #define THOSEMAGNIFICENTMEN_CONSTANTS_H
 
+const float GAME_SPEED = 0.7f;
+
 const float GRAVITY = 0.0003f;
 const float STALL_SPEED = 0.05f;
 const float MAX_SPEED = 0.35f;

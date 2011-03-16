@@ -64,6 +64,7 @@ int Game::Run()
     LARGE_INTEGER perfFreq;
     ::QueryPerformanceFrequency(&perfFreq);
     float convertToMillis = 1000.0f / static_cast<float>(perfFreq.QuadPart);
+    convertToMillis *= GAME_SPEED;
 
     LARGE_INTEGER current;
     LARGE_INTEGER lastFrame;
