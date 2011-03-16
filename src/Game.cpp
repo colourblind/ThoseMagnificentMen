@@ -1,6 +1,5 @@
 #include "Game.h"
 
-#include "Maths.h"
 #include "Constants.h"
 #include "Loaders.h"
 #include "Resource.h"
@@ -8,7 +7,7 @@
 using namespace std;
 using namespace ThoseMagnificentMen;
 
-Game::Game(HINSTANCE hInstance) : activePlayers_(2), botPlayers_(2), texture_(0)
+Game::Game(HINSTANCE hInstance) : activePlayers_(1), botPlayers_(1), texture_(0)
 {
     window_.Create(hInstance);
 
@@ -87,8 +86,9 @@ int Game::Run()
             float msecs = static_cast<float>(current.QuadPart - lastFrame.QuadPart) * convertToMillis;
             lastFrame = current;
 
-            HandleControls(msecs);
             UpdateAndRender(msecs);
+            HandleControls(msecs);
+            HandleAI(msecs);
             GameLogic();
 
             window_.SwapBuffers();
@@ -109,19 +109,91 @@ void Game::HandleControls(float msecs)
                 players_[i].TurnLeft(msecs);
             if (input_.GetKeyDown(keyBindings_[i].right))
                 players_[i].TurnRight(msecs);
-        }
-        if (input_.GetKeyDown(keyBindings_[i].fire))
-        {
-            Bullet * bullet = players_[i].Fire();
-            if (bullet != NULL)
-                bullets_.push_back(bullet);
+            if (input_.GetKeyDown(keyBindings_[i].fire))
+            {
+                Bullet *bullet = players_[i].Fire();
+                if (bullet != NULL)
+                    bullets_.push_back(bullet);
+            }
         }
     }
+}
 
+void Game::HandleAI(float msecs)
+{
     // Run AI for computer planes
-    for (int i = activePlayers_; i < activePlayers_ + botPlayers_; i ++)
+    for (int i = activePlayers_; i < TotalPlayers(); i ++)
     {
+        // Find the closets enemy plane
+        Plane *current = &players_[i];
+        Plane *target = NULL;
+        float currentRange = 9999;
+        for (int j = 0; j < TotalPlayers(); j ++)
+        {
+            if (j == i) // Can't target self
+                continue;
 
+            // We're currently ignoring respawning players. May remove this later to make
+            // the AI more aggressive
+            if (currentRange > current->GetPosition().Distance(players_[j].GetPosition())
+                && !players_[j].IsDying() && !players_[j].IsStalled() && !players_[j].IsInvincible())
+            {
+                target = &players_[j];
+                currentRange = current->GetPosition().Distance(target->GetPosition());
+            }
+        }
+
+        if (target != NULL)
+        {
+            // Plot an intercept course!
+            Vector2 interceptPoint = Vector2::CollisionPoint(current->GetPosition(), current->GetVelocity(), target->GetPosition(), target->GetVelocity());
+
+            // Calculate time for bullet to reach intercept point
+            Vector2 bulletStartPos = current->GetPosition() + current->GetVelocity().Normalise() * (20 + MAX_SPEED + 0.5f);
+            float bulletTravelTime = (bulletStartPos - interceptPoint).Length() / BULLET_SPEED;
+            // Calculate target position at that time
+            Vector2 projectedTargetPos = target->GetPosition() + (target->GetVelocity() * bulletTravelTime);
+            // Decide if it's worth a shot
+            if (interceptPoint.Distance(projectedTargetPos) < 20)
+            {
+                Bullet *bullet = current->Fire();
+                if (bullet != NULL)
+                    bullets_.push_back(bullet);
+            }
+
+            // Don't play chicken
+            // TODO: Turn away from collisions
+
+            // Don't derp
+            // TODO: Don't run into the ground
+
+            // Attempt to maneuver for a better shot
+            // TODO: aim for projectTargetPos
+            float currentAngle = current->GetRotation();
+            Vector2 targetVector = (projectedTargetPos - current->GetPosition());
+            float targetAngle = atan(targetVector.y / targetVector.x);
+
+            if (targetAngle > currentAngle)
+                current->TurnLeft(msecs);
+            else
+                current->TurnRight(msecs);
+
+            glBegin(GL_QUADS);
+                glColor3f(0, 0, 0);
+                glVertex2f(interceptPoint.x - 2, interceptPoint.y - 2);
+                glVertex2f(interceptPoint.x + 2, interceptPoint.y - 2);
+                glVertex2f(interceptPoint.x + 2, interceptPoint.y + 2);
+                glVertex2f(interceptPoint.x - 2, interceptPoint.y + 2);
+            glEnd();
+
+            glBegin(GL_QUADS);
+                glColor3f(1, 0, 1);
+                glVertex2f(projectedTargetPos.x - 15, projectedTargetPos.y - 15);
+                glVertex2f(projectedTargetPos.x + 15, projectedTargetPos.y - 15);
+                glVertex2f(projectedTargetPos.x + 15, projectedTargetPos.y + 15);
+                glVertex2f(projectedTargetPos.x - 15, projectedTargetPos.y + 15);
+            glEnd();
+        }
     }
 }
 

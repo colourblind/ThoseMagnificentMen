@@ -28,6 +28,7 @@ namespace ThoseMagnificentMen
 
     private:
         void HandleControls(float msecs);
+        void HandleAI(float msecs);
         void UpdateAndRender(float msecs);
         void GameLogic();
         int TotalPlayers() { return activePlayers_ + botPlayers_; }
