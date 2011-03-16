@@ -179,21 +179,24 @@ void Game::HandleAI(float msecs)
             else
                 current->TurnRight(msecs);
 
-            glBegin(GL_QUADS);
-                glColor3f(0, 0, 0);
-                glVertex2f(interceptPoint.x - 2, interceptPoint.y - 2);
-                glVertex2f(interceptPoint.x + 2, interceptPoint.y - 2);
-                glVertex2f(interceptPoint.x + 2, interceptPoint.y + 2);
-                glVertex2f(interceptPoint.x - 2, interceptPoint.y + 2);
-            glEnd();
+            if (DEBUG_RENDERER)
+            {
+                glBegin(GL_QUADS);
+                    glColor3f(0, 0, 0);
+                    glVertex2f(interceptPoint.x - 2, interceptPoint.y - 2);
+                    glVertex2f(interceptPoint.x + 2, interceptPoint.y - 2);
+                    glVertex2f(interceptPoint.x + 2, interceptPoint.y + 2);
+                    glVertex2f(interceptPoint.x - 2, interceptPoint.y + 2);
+                glEnd();
 
-            glBegin(GL_QUADS);
-                glColor3f(1, 0, 1);
-                glVertex2f(projectedTargetPos.x - 15, projectedTargetPos.y - 15);
-                glVertex2f(projectedTargetPos.x + 15, projectedTargetPos.y - 15);
-                glVertex2f(projectedTargetPos.x + 15, projectedTargetPos.y + 15);
-                glVertex2f(projectedTargetPos.x - 15, projectedTargetPos.y + 15);
-            glEnd();
+                glBegin(GL_QUADS);
+                    glColor3f(1, 0, 1);
+                    glVertex2f(projectedTargetPos.x - 15, projectedTargetPos.y - 15);
+                    glVertex2f(projectedTargetPos.x + 15, projectedTargetPos.y - 15);
+                    glVertex2f(projectedTargetPos.x + 15, projectedTargetPos.y + 15);
+                    glVertex2f(projectedTargetPos.x - 15, projectedTargetPos.y + 15);
+                glEnd();
+            }
         }
     }
 }

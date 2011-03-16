@@ -19,4 +19,6 @@ const int WIDTH = 640;
 const int HEIGHT = 480;
 const float GROUND_LEVEL = 50;
 
+const bool DEBUG_RENDERER = false;
+
 #endif // THOSEMAGNIFICENTMEN_CONSTANTS_H
