@@ -17,6 +17,13 @@ namespace ThoseMagnificentMen
             return ::sqrt(x * x + y * y);
         }
 
+        inline float Distance(const Vector2 &b) const
+        {
+            float ax = x - b.x;
+            float ay = y - b.y;
+            return ::sqrt(ax * ax + ay * ay);
+        }
+
         inline Vector2 Normalise() const
         {
             Vector2 v(*this);
@@ -67,6 +74,28 @@ namespace ThoseMagnificentMen
             y *= b;
             return *this;
         }
+
+        static Vector2 CollisionPoint(Vector2 aPos, Vector2 aVel, Vector2 bPos, Vector2 bVel)
+        {
+            Vector2 aPos2 = aPos + aVel;
+            Vector2 bPos2 = bPos + bVel;
+
+            // Get both lines in the form ax + by = c
+            float a1 = aPos2.y - aPos.y;
+            float b1 = aPos.x - aPos2.x;
+            float c1 = a1 * aPos.x + b1 * aPos.y;
+
+            float a2 = bPos2.y - bPos.y;
+            float b2 = bPos.x - bPos2.x;
+            float c2 = a2 * bPos.x + b2 * bPos.y;
+
+            float det = a1 * b2 - a2 * b1;
+            if (det == 0) // Parallel lines
+                return Vector2();
+            else
+                return Vector2((b2 * c1 - b1 * c2) / det, (a1 * c2 - a2 * c1) / det);
+        }
+
     };
 }
 
