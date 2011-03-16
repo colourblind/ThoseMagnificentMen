@@ -59,8 +59,7 @@ void Plane::Update(float msecs)
         if (speed_ > MAX_SPEED)
             speed_ = MAX_SPEED;
 
-        position_.x += cos(rotation_) * speed_ * msecs;
-        position_.y += sin(rotation_) * speed_ * msecs;
+        position_ += GetVelocity() * msecs;
 
         // Wrap at the screen edges
         if (position_.x < 0)
