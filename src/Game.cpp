@@ -125,8 +125,13 @@ void Game::HandleAI(float msecs)
     // Run AI for computer planes
     for (int i = activePlayers_; i < TotalPlayers(); i ++)
     {
-        // Find the closets enemy plane
+        // Bail if it's dying or stalled. We're not allowing sniping while stalling, the
+        // bots are just too good a shot
         Plane *current = &players_[i];
+        if (current->IsDying() || current->IsStalled())
+            continue;
+
+        // Find the closets enemy plane
         Plane *target = NULL;
         float currentRange = 9999;
         for (int j = 0; j < TotalPlayers(); j ++)
