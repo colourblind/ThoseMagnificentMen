@@ -9,8 +9,7 @@ Bullet::Bullet(Plane *owner) : owner_(owner)
 {
     position_ = owner_->GetPosition();
     // Push the bullet outside of the firing plane in the direction it is facing
-    position_.x += cos(owner_->GetRotation()) * 20;
-    position_.y += sin(owner_->GetRotation()) * 20;
+    position_ += owner_->GetVelocity().Normalise() * (20 + MAX_SPEED + 0.5f);
 
     velocity_ = owner_->GetVelocity().Normalise() * BULLET_SPEED;
 }
