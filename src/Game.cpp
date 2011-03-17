@@ -7,7 +7,7 @@
 using namespace std;
 using namespace ThoseMagnificentMen;
 
-Game::Game(HINSTANCE hInstance) : activePlayers_(1), botPlayers_(1), texture_(0)
+Game::Game(HINSTANCE hInstance, int humanPlayers, int bots) : activePlayers_(humanPlayers), botPlayers_(bots), texture_(0)
 {
     window_.Create(hInstance);
 
@@ -149,7 +149,15 @@ void Game::HandleAI(float msecs)
             }
         }
 
-        if (target != NULL)
+        if (target == NULL) // Level off if we don't have a target
+        {
+            float targetAngle = 0;
+            if (targetAngle > current->GetRotation())
+                current->TurnLeft(msecs);
+            else
+                current->TurnRight(msecs);
+        }
+        else
         {
             // Plot an intercept course!
             Vector2 interceptPoint = Vector2::CollisionPoint(current->GetPosition(), current->GetVelocity(), target->GetPosition(), target->GetVelocity());

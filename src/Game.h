@@ -21,7 +21,7 @@ namespace ThoseMagnificentMen
     class Game
     {
     public:
-        Game(HINSTANCE hInstance);
+        Game(HINSTANCE hInstance, int humanPlayers, int bots);
         ~Game();
 
         int Run();
