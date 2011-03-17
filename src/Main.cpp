@@ -14,6 +14,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLin
 
     ss >> humanPlayers >> bots;
 
+    if (humanPlayers > 4)
+        humanPlayers = 4;
+    if (humanPlayers + bots > 4)
+        bots = 4 - humanPlayers;
+
     ThoseMagnificentMen::Game game(hInstance, humanPlayers, bots);
 	return game.Run();
 }
