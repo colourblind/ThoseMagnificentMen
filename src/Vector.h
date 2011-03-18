@@ -33,6 +33,16 @@ namespace ThoseMagnificentMen
             return v;
         }
 
+        inline float Dot(const Vector2 &b) const
+        {
+            return x * b.x + y * b.y;
+        }
+
+        inline float Cross(const Vector2 &b) const
+        {
+            return x * b.y - b.x * y;
+        }
+
         inline Vector2 operator +(const Vector2 &b) const
         {
             Vector2 v(*this);

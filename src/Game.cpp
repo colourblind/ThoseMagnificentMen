@@ -160,13 +160,21 @@ void Game::HandleAI(float msecs)
         else
         {
             // Plot an intercept course!
-            Vector2 interceptPoint = Vector2::CollisionPoint(current->GetPosition(), current->GetVelocity(), target->GetPosition(), target->GetVelocity());
+            Vector2 currentPosition = current->GetPosition();
+            Vector2 targetPosition = target->GetPosition();
+            Vector2 interceptPoint = Vector2::CollisionPoint(currentPosition, current->GetVelocity(), targetPosition, target->GetVelocity());
 
+            // If the target is running parallel to us, go for them
+            //if (interceptPoint.x == 0 && interceptPoint.y == 0)
+            //    interceptPoint = targetPosition;
+            
+            // If the target is in front of us, try and lead it
             // Calculate time for bullet to reach intercept point
-            Vector2 bulletStartPos = current->GetPosition() + current->GetVelocity().Normalise() * (20 + MAX_SPEED + 0.5f);
+            Vector2 bulletStartPos = currentPosition + current->GetVelocity().Normalise() * (20 + MAX_SPEED + 0.5f);
             float bulletTravelTime = (bulletStartPos - interceptPoint).Length() / BULLET_SPEED;
             // Calculate target position at that time
-            Vector2 projectedTargetPos = target->GetPosition() + (target->GetVelocity() * bulletTravelTime);
+            Vector2 projectedTargetPos = targetPosition + (target->GetVelocity() * bulletTravelTime);
+
             // Decide if it's worth a shot
             if (interceptPoint.Distance(projectedTargetPos) < 20)
             {
@@ -182,12 +190,12 @@ void Game::HandleAI(float msecs)
             // TODO: Don't run into the ground
 
             // Attempt to maneuver for a better shot
-            // TODO: aim for projectTargetPos
-            float currentAngle = current->GetRotation();
-            Vector2 targetVector = (projectedTargetPos - current->GetPosition());
-            float targetAngle = atan(targetVector.y / targetVector.x);
+            Vector2 currentVelocity = current->GetVelocity().Normalise();
+            Vector2 targetVelocity = (currentPosition - projectedTargetPos).Normalise();
 
-            if (targetAngle > currentAngle)
+            float diffAngle = currentVelocity.Cross(targetVelocity);
+
+            if (diffAngle < 0)
                 current->TurnLeft(msecs);
             else
                 current->TurnRight(msecs);
