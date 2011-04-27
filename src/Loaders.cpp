@@ -7,23 +7,31 @@
 
 using namespace ThoseMagnificentMen;
 
+struct PngBuffer
+{
+    PngBuffer(unsigned char *data) : Data(data), Position(0) { }
+
+    unsigned char *Data;
+    unsigned int Position;
+};
+
 void ReadData(png_structp pngPtr, png_bytep data, png_size_t length)
 {
-    static unsigned int counter = 0;
-    unsigned char *a = (unsigned char *)png_get_io_ptr(pngPtr) + counter;
-    memcpy((unsigned char *)data, a, length);
-    counter += length;
+    PngBuffer *buffer = reinterpret_cast<PngBuffer *>(png_get_io_ptr(pngPtr));
+    memcpy(reinterpret_cast<unsigned char *>(data), buffer->Data + buffer->Position, length);
+    buffer->Position += length;
 }
 
 GLuint Loaders::LoadTexture(int resourceId)
 {
     HRSRC resourceBlock = ::FindResource(NULL, MAKEINTRESOURCE(resourceId), RT_RCDATA);
     HGLOBAL resourceHandle = ::LoadResource(NULL, resourceBlock);
-    unsigned char *resourceData = (unsigned char *)::LockResource(resourceHandle);
+    unsigned char *resourceData = reinterpret_cast<unsigned char *>(::LockResource(resourceHandle));
 
     png_structp pngPtr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
     png_infop infoPtr = png_create_info_struct(pngPtr);
-    png_set_read_fn(pngPtr, (voidp)resourceData, ReadData);
+    PngBuffer buffer(resourceData);
+    png_set_read_fn(pngPtr, reinterpret_cast<voidp>(&buffer), ReadData);
     
     png_read_info(pngPtr, infoPtr);
 
