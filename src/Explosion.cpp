@@ -19,13 +19,12 @@ bool Explosion::Update(float msecs)
     {
         if (debris_[i].Position.y < GROUND_LEVEL)
         {
-            debris_[i].Velocity *= 0.95f;
+            debris_[i].Velocity *= 0.8f;
             debris_[i].Velocity.y *= -1;
             debris_[i].Position.y += GROUND_LEVEL - debris_[i].Position.y;
         }
 
-        debris_[i].Velocity *= 0.99f;
-        debris_[i].Velocity.y -= GRAVITY * 3 * msecs;
+        debris_[i].Velocity.y -= GRAVITY * 6 * msecs;
         debris_[i].Position += debris_[i].Velocity * msecs;
         debris_[i].Rotation += debris_[i].RotationSpeed * msecs;
     }
